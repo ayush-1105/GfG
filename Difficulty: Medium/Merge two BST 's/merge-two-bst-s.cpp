@@ -96,40 +96,22 @@ class Solution {
   public:
     // Function to return a list of integers denoting the node
     // values of both the BST in a sorted order.
-    
-    Node* insert(Node* root, int value) {
-        if (!root) {
-            return new Node(value);
+    void inorderroot(Node *root,multiset<int> &s)
+    {
+        if(root!=NULL)
+        {
+            inorderroot(root->left,s);
+            s.insert(root->data);
+            inorderroot(root->right,s);
         }
-        if (value >= root->data) {
-            root->right = insert(root->right, value);
-        } else if (value < root->data) {
-            root->left = insert(root->left, value);
-        }
-        return root;
     }
-    void inorder1(Node *root1, Node*root2) {
-        if (!root1)
-            return;
-        inorder1(root1->left, root2);
-        insert(root2,root1->data);
-        inorder1(root1->right, root2);
-    }
-    void inorder2(Node *root, vector<int>& arr) {
-        if (!root)
-            return;
-        inorder2(root->left, arr);
-        arr.push_back(root->data);
-        inorder2(root->right, arr);
-    }
-    
-    
     vector<int> merge(Node *root1, Node *root2) {
         // Your code here
-        vector<int> arr;
-        inorder1(root1, root2);
-        inorder2(root2, arr);
-        return arr;
+        multiset<int> s;
+        inorderroot(root1, s);
+        inorderroot(root2, s);
+        vector<int> res(s.begin(),s.end());
+        return res;
     }
 };
 
