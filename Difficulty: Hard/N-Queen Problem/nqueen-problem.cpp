@@ -4,99 +4,75 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+
 // } Driver Code Ends
 // User function Template for C++
 
-class Solution{
-public:
-    void addSolution(vector<vector<int>> &board, vector<vector<int>> &ans, int n) {
-    vector<int> temp;
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            if (board[i][j] == 1) {
-                temp.push_back(j + 1); // Adding the column number of the queen + 1
+class Solution {
+  public:
+    vector<vector<int>> nQueen(int n) {
+       
+        vector<vector<int>> result;
+        vector<int> board(n, 0);
+        solve(0, n, board, result);
+        return result;
+    }
+
+private:
+    void solve(int col, int n, vector<int>& board, vector<vector<int>>& result) {
+        if (col == n) {
+            result.push_back(board);
+            return;
+        }
+        
+        for (int row = 0; row < n; row++) {
+            if (isSafe(board, col, row)) {
+                board[col] = row + 1;
+                solve(col + 1, n, board, result);
             }
         }
     }
-    ans.push_back(temp);
-}
-
-bool isSafe(int row, int col, vector<vector<int>> &board, int n) {
-    int x = row;
-    int y = col;
-    while (y >= 0) {
-        if (board[x][y] == 1)
-            return false;
-        y--;
-    }
-
-    x = row;
-    y = col;
-    while (y >= 0 && x >= 0) {
-        if (board[x][y] == 1)
-            return false;
-        y--;
-        x--;
-    }
-
-    x = row;
-    y = col;
-    while (y >= 0 && x < n) {
-        if (board[x][y] == 1)
-            return false;
-        y--;
-        x++;
-    }
-    return true;
-}
-
-void solve(int col, vector<vector<int>> &board, vector<vector<int>> &ans, int n) {
-    if (col == n) {
-        addSolution(board, ans, n);
-        return;
-    }
-
-    for (int row = 0; row < n; row++) {
-        if (isSafe(row, col, board, n)) {
-            board[row][col] = 1;
-            solve(col + 1, board, ans, n);
-            board[row][col] = 0;
+    
+    bool isSafe(vector<int>& board, int col, int row) {
+        for (int i = 0; i < col; i++) {
+            int placedRow = board[i] - 1;
+            if (placedRow == row || abs(placedRow - row) == abs(i - col)) {
+                return false;
+            }
         }
-    }
-}
-    vector<vector<int>> nQueen(int n) {
+        return true;
+  
+
         // code here
-    vector<vector<int>> board(n, vector<int>(n, 0));
-    vector<vector<int>> ans;
-    solve(0, board, ans, n);
-    // Sorting the output before returning it
-    sort(ans.begin(), ans.end());
-    return ans;
     }
 };
 
 //{ Driver Code Starts.
 
-int main(){
+int main() {
     int t;
-    cin>>t;
-    while(t--){
+    cin >> t;
+    while (t--) {
         int n;
-        cin>>n;
-        
+        cin >> n;
+
         Solution ob;
         vector<vector<int>> ans = ob.nQueen(n);
-        if(ans.size() == 0)
-            cout<<-1<<"\n";
+        if (ans.size() == 0)
+            cout << -1 << "\n";
         else {
-            for(int i = 0;i < ans.size();i++){
-                cout<<"[";
-                for(int u: ans[i])
-                    cout<<u<<" ";
-                cout<<"] ";
+            sort(ans.begin(), ans.end());
+            for (int i = 0; i < ans.size(); i++) {
+                cout << "[";
+                for (int u : ans[i])
+                    cout << u << " ";
+                cout << "] ";
             }
-            cout<<endl;
+            cout << endl;
         }
+
+        cout << "~"
+             << "\n";
     }
     return 0;
 }
