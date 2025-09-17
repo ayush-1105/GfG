@@ -1,99 +1,34 @@
-//{ Driver Code Starts
-// Initial Template for C++
-
-#include <bits/stdc++.h>
-using namespace std;
-
-
-// } Driver Code Ends
-
-
 class Solution {
   public:
     string decodedString(string &s) {
         // code here
-        stack<char> st;
-        
-        int n = s.size();
-        int i = 0;
-        
-        while(i < n){
-            
-            // poping out
-            if(s[i] == ']'){
-                
-                string temp = "";
-                
-                // collect the string for repetation
-                while(st.top() != '['){
-                    temp += st.top();
-                    st.pop();
-                }
-                
-                // remove the first bracket
-                st.pop();
-                
-                // reverse(temp.begin(), temp.end());
-                
-                // calculate the count
-                int count = 0;
-                string countStr = "";
-                
-                while(!st.empty() && st.top() >= '0' && st.top() <= '9'){
-                    
-                    countStr += st.top();
-                    st.pop();
-                }
-                
-                reverse(countStr.begin(), countStr.end());
-                count = stoi(countStr);
-                
-                for(int j = 0; j < count; j++){
-                    
-                    int m = temp.size();
-                    
-                    for(int k = m-1; k >= 0; k--){
-                        st.push(temp[k]);
-                    }
+        stack<string> strStack;
+        stack<int> numStack;
+        string res = "";
+        int num = 0;
+
+        for (char c : s) {
+            if (isdigit(c)) {
+                num = num * 10 + (c - '0');
+            } else if (isalpha(c)) {
+                res += c;
+            } else if (c == '[') {
+                strStack.push(res);
+                numStack.push(num);
+                res = "";
+                num = 0;
+            } else if (c == ']') {
+                string temp = res;
+                res = strStack.top();
+                strStack.pop();
+                int count = numStack.top();
+                numStack.pop();
+                while (count--) {
+                    res += temp;
                 }
             }
-            // push back
-            else{
-                st.push(s[i]);
-            }
-            
-            i++;
         }
         
-        string temp = "";
-        
-        while(!st.empty()){
-            temp += st.top();
-            st.pop();
-        }
-        
-        reverse(temp.begin(), temp.end());
-        
-        return temp;
+        return res;
     }
 };
-
-
-//{ Driver Code Starts.
-
-int main() {
-    int t;
-    cin >> t;
-    while (t--) {
-        string s;
-        cin >> s;
-
-        Solution ob;
-        cout << ob.decodedString(s) << "\n";
-
-        cout << "~"
-             << "\n";
-    }
-    return 0;
-}
-// } Driver Code Ends
