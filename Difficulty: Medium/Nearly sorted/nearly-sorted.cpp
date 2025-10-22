@@ -1,72 +1,23 @@
-//{ Driver Code Starts
-#include <bits/stdc++.h>
-using namespace std;
-
-
-// } Driver Code Ends
-// User function Template for C++
 class Solution {
   public:
     void nearlySorted(vector<int>& arr, int k) {
-        // code
-        
-        
-        //Time limit 
-        // for(int i = 0; i < arr.size()-1; i++)
-        // {
-        //     for(int j = i; j < arr.size() ; j++){
-        //         if(arr[i] > arr[j])
-        //         {
-        //             int temp = arr[i];
-        //             arr[i] = arr[j];
-        //             arr[j] = temp;
-        //         }
-        //     }
-        // }
-        
-        
-        int n=arr.size(), idx=0;
-        priority_queue<int,vector<int>,greater<int>> pq;
-        for(int i=0; i<n; i++) {
-            pq.push(arr[i]);
-            if(pq.size()==k+1) {
-                arr[idx++]=pq.top();
+        // code here
+        priority_queue<int>pq;
+        int i=0,j=0,n=arr.size(),curr = 0;
+        while(j < n){
+            pq.push(-1 * arr[j]);
+            if(j-i+1 < k+1){
+                j++;
+            }
+            else{
+                arr[curr++] = pq.top()*-1;
                 pq.pop();
+                i++;j++;
             }
         }
-        while(!pq.empty()) {
-            arr[idx++]=pq.top();
+        while(curr < n){
+            arr[curr++] = -1 * pq.top();
             pq.pop();
         }
     }
 };
-
-//{ Driver Code Starts.
-
-int main() {
-    string ts;
-    getline(cin, ts);
-    int t = stoi(ts);
-    while (t--) {
-        vector<int> arr;
-        string input;
-        getline(cin, input);
-        stringstream ss(input);
-        int number;
-        while (ss >> number) {
-            arr.push_back(number);
-        }
-        string ks;
-        getline(cin, ks);
-        int k = stoi(ks);
-        Solution obj;
-        obj.nearlySorted(arr, k);
-        for (int i = 0; i < arr.size(); i++) {
-            cout << arr[i] << " ";
-        }
-        cout << endl;
-        // cout << "~" << endl;
-    }
-    return 0;
-}
-// } Driver Code Ends
